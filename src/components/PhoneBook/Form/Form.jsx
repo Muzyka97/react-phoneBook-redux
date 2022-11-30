@@ -1,6 +1,7 @@
-import {Component} from "react";
+import useForm from 'hooks/useForm';
 import {initialState} from './initialState';
 import styled from 'styled-components';
+
 
 const FormItem = styled.form`
     padding: 0px;
@@ -22,28 +23,13 @@ const Btn = styled.button`
       };
 
 `;
-class Form extends Component{
-    state = {...initialState}
+const Form = ({ onSubmit })=> {
+    const { state, handleInputChange, handleSubmitForm} = useForm({
+        initialState,
+        onSubmit,
+    });
 
-
-    handleInputChange = event =>{
-        const {name, value} = event.currentTarget;
-        this.setState({[name]: value});
-    };
-
-    handleSubmitForm = event =>{
-        event.preventDefault()
-        this.props.onSubmit(this.state);
-        this.setState({...initialState}); 
-        // this.reset();
-    };
-
-    // reset=()=>{
-    //     this.setState({name: '', number:''})
-    // };
-    render(){
-        const {name,number} = this.state;
-        const {handleInputChange, handleSubmitForm} = this;
+    const { name, number } = state;
 
     return(
         <>
@@ -75,8 +61,6 @@ class Form extends Component{
             <Btn type="submit">Add contact</Btn>
         </FormItem>
         </>
-    )
-    }
-        
+    )   
 };
 export default Form;
