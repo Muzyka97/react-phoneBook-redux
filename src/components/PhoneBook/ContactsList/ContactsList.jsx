@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'; 
 import styled from 'styled-components';
 
+
 const List = styled.li`
     margin-top: ${p=>p.theme.space[3]}px;
 `
@@ -18,10 +19,11 @@ const Btn = styled.button`
       };
 
 `
-const ContactsList = ({contacts, deleteContacts}) =>{
+const ContactsList = ({contacts,deleteContacts}) =>{
+
     const contact = contacts.map(({id, name, number})=>(
         <List key={id}> {name}: {number} 
-            <Btn onClick={()=> deleteContacts(id)}>Delete</Btn>
+            <Btn onClick={()=>deleteContacts(id)}>Delete</Btn>
         </List>
     ));
     return (

@@ -1,6 +1,9 @@
 // import React,{Component} from "react";
-import {useState,useEffect, useRef} from 'react';
-import { nanoid } from 'nanoid';
+// import {useState} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {actions} from '../../redux/sliceContacts';
+import { setFilter } from 'redux/sliceFilter';
+
 
 import Form from "./Form";
 import ContactsList from "./ContactsList";
@@ -8,55 +11,46 @@ import Filter from "./Filter/Filter";
 import Section from "components/Section";
 import {Box} from '../Box/Box';
 
-
 const PhoneBook = () =>{
-    const [filter, setFilter] = useState('');
-    const [contacts, setContacts] = useState([]);
+    const contacts = useSelector(state => state.contacts);
+    const filter = useSelector(state => state.filter);
+  
+    const dispach = useDispatch();
 
-    const firstRender = useRef(true);
 
-    useEffect(()=>{
-        if(firstRender.current){
-            const contacts = localStorage.getItem("contacts");
-            const parsedContacts = JSON.parse(contacts);
-            // parsedContacts?.length like default value.
-            if(parsedContacts?.length){
-                setContacts(parsedContacts)
-            };
-        firstRender.current = false;
-        };
-    },[])
+    // const [contacts, setContacts] = useState([]);
+    // const firstRender = useRef(true);
 
-    useEffect(()=>{
-        if(!firstRender.current){
-            localStorage.setItem('contacts', JSON.stringify(contacts))
-        };
-    },[contacts])
+    // useEffect(()=>{
+    //     if(firstRender.current){
+    //         const contacts = localStorage.getItem("contacts");
+    //         const parsedContacts = JSON.parse(contacts);
+    //         // parsedContacts?.length like default value.
+    //         if(parsedContacts?.length){
+    //             setContacts(parsedContacts)
+    //         };
+    //     firstRender.current = false;
+    //     };
+    // },[])
+
+    // useEffect(()=>{
+    //     if(!firstRender.current){
+    //         localStorage.setItem('contacts', JSON.stringify(contacts))
+    //     };
+    // },[contacts])
 
     const addContact = data => {
-        const dublicate = contacts.find(contact=> contact.name === data.name)
+        const dublicate = contacts.length > 0 ? contacts.find(contact=> contact.name === data.name) : false;
         if(dublicate){
             alert(`${data.name} is already in name list`);
             
-            return
+        return
         }
-        setContacts(prevState => {
-            const { name, number } = data;
-            const newContact = {
-              name,
-              number,
-              id: nanoid(),
-            };
-            return [...prevState, newContact];
-          });
+        dispach(actions.addContact(data))
     };
 
-    const deleteContacts = (id) => {
-        setContacts(prevState =>
-            prevState.filter(contact => contact.id !== id)
-        );
-    };
-
+    const deleteContacts = (id) =>  dispach(actions.deleteContacts(id))
+    
     const getFilteredContacts = () =>{
         const filterText = filter.toLowerCase();
         const filterContacts = contacts.filter(({ name }) => {
@@ -66,9 +60,7 @@ const PhoneBook = () =>{
     return filterContacts;
     };
 
-    const changeFilter = ({target}) =>{
-        setFilter( target.value )
-    };
+    const changeFilter = ({target}) => dispach(setFilter(target.value ))
     
     return(
         <Box
