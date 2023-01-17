@@ -8,7 +8,9 @@ const sliceFilter = createSlice({
             return state = payload;
         }
     }
+   
 });
 
 export const filterReducer = sliceFilter.reducer;
 export const {setFilter} = sliceFilter.actions;
+console.log(filterReducer);
