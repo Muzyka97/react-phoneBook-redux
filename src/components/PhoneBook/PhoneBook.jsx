@@ -1,9 +1,7 @@
 // import React,{Component} from "react";
 // import {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {actions} from '../../redux/sliceContacts';
 import { setFilter } from 'redux/sliceFilter';
-
 
 import Form from "./Form";
 import ContactsList from "./ContactsList";
@@ -11,8 +9,10 @@ import Filter from "./Filter/Filter";
 import Section from "components/Section";
 import {Box} from '../Box/Box';
 
+import { addContacts, deleteContacts } from '../../redux/operation';
+
 const PhoneBook = () =>{
-    const contacts = useSelector(state => state.contacts);
+    const contacts = useSelector(state => state.contacts.items);
     const filter = useSelector(state => state.filter);
   
     const dispach = useDispatch();
@@ -46,10 +46,10 @@ const PhoneBook = () =>{
             
         return
         }
-        dispach(actions.addContact(data))
+        dispach(addContacts(data))
     };
 
-    const deleteContacts = (id) =>  dispach(actions.deleteContacts(id))
+    const deleteContact = (id) =>  dispach(deleteContacts(id))
     
     const getFilteredContacts = () =>{
         const filterText = filter.toLowerCase();
@@ -83,7 +83,7 @@ const PhoneBook = () =>{
                     paddingTop='8px'
                     paddingBottom="40px">
                     <Filter filter={filter} changeFilter={changeFilter}/>
-                    <ContactsList contacts={getFilteredContacts()} deleteContacts={deleteContacts}/>
+                    <ContactsList contacts={getFilteredContacts()} deleteContacts={deleteContact}/>
                 </Box>
             </Section>
         </Box>

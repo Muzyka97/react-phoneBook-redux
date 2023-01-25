@@ -13,4 +13,3 @@ const sliceFilter = createSlice({
 
 export const filterReducer = sliceFilter.reducer;
 export const {setFilter} = sliceFilter.actions;
-console.log(filterReducer);
